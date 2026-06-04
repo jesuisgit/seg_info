@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Aula 1</title>
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 10px;
+    width: 400px;
+}
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.option {
+    background: #334155;
+    color: white;
+}
+.option:hover {
+    background: #475569;
+}
+#nextBtn {
+    background: #22c55e;
+    color: black;
+    display: none;
+}
+.correct { background: green; }
+.wrong { background: red; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+    <button id="nextBtn">Próxima</button>
+</div>
+
+<script>
+const quiz = [
+{
+    q: "O que é informação?",
+    a: [
+        {text:"Dados organizados", correct:true},
+        {text:"Experiência adquirida", correct:false},
+        {text:"Sabedoria humana", correct:false},
+        {text:"Conhecimento técnico", correct:false}
+    ]
+},
+{
+    q: "O que é conhecimento?",
+    a: [
+        {text:"Dados organizados", correct:false},
+        {text:"Informação interpretada com experiência", correct:true},
+        {text:"Sistema computacional", correct:false},
+        {text:"Rede de dados", correct:false}
+    ]
+},
+{
+    q: "Qual é um dos pilares da segurança da informação?",
+    a: [
+        {text:"Velocidade", correct:false},
+        {text:"Confidencialidade", correct:true},
+        {text:"Custo", correct:false},
+        {text:"Design", correct:false}
+    ]
+},
+{
+    q: "O que garante a integridade?",
+    a: [
+        {text:"Acesso aberto", correct:false},
+        {text:"Informação não alterada indevidamente", correct:true},
+        {text:"Backup automático", correct:false},
+        {text:"Velocidade de acesso", correct:false}
+    ]
+},
+{
+    q: "O WannaCry explorava qual vulnerabilidade?",
+    a: [
+        {text:"HTTP", correct:false},
+        {text:"FTP", correct:false},
+        {text:"SMB", correct:true},
+        {text:"DNS", correct:false}
+    ]
+},
+{
+    q: "O que é phishing?",
+    a: [
+        {text:"Ataque físico", correct:false},
+        {text:"Engenharia social para roubo de dados", correct:true},
+        {text:"Backup automático", correct:false},
+        {text:"Firewall", correct:false}
+    ]
+},
+{
+    q: "O que é vulnerabilidade?",
+    a: [
+        {text:"Sistema seguro", correct:false},
+        {text:"Fraqueza explorável", correct:true},
+        {text:"Proteção ativa", correct:false},
+        {text:"Ataque completo", correct:false}
+    ]
+},
+{
+    q: "Qual é a fórmula do risco?",
+    a: [
+        {text:"Ataque + defesa", correct:false},
+        {text:"Probabilidade x Impacto", correct:true},
+        {text:"Senha + firewall", correct:false},
+        {text:"Backup + usuário", correct:false}
+    ]
+},
+{
+    q: "Qual é um tipo de impacto?",
+    a: [
+        {text:"Velocidade", correct:false},
+        {text:"Financeiro", correct:true},
+        {text:"Cor", correct:false},
+        {text:"Layout", correct:false}
+    ]
+},
+{
+    q: "Qual é um controle de segurança?",
+    a: [
+        {text:"Firewall", correct:true},
+        {text:"Teclado", correct:false},
+        {text:"Mouse", correct:false},
+        {text:"Monitor", correct:false}
+    ]
+}
+];
+
+let index = 0;
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+const nextBtn = document.getElementById("nextBtn");
+
+function loadQuestion() {
+    nextBtn.style.display = "none";
+    answers.innerHTML = "";
+    let current = quiz[index];
+    question.innerText = current.q;
+
+    current.a.forEach(opt => {
+        let btn = document.createElement("button");
+        btn.innerText = opt.text;
+        btn.classList.add("option");
+        btn.onclick = () => selectAnswer(btn, opt.correct);
+        answers.appendChild(btn);
+    });
+}
+
+function selectAnswer(btn, correct) {
+    Array.from(answers.children).forEach(b => b.disabled = true);
+    if(correct) btn.classList.add("correct");
+    else btn.classList.add("wrong");
+    nextBtn.style.display = "block";
+}
+
+nextBtn.onclick = () => {
+    index++;
+    if(index < quiz.length) {
+        loadQuestion();
+    } else {
+        question.innerText = "Fim do Quiz ✅";
+        answers.innerHTML = "";
+        nextBtn.style.display = "none";
+    }
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
