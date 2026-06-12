@@ -2,188 +2,136 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Aula 1</title>
+<title>Quiz Segurança da Informação</title>
+
 <style>
 body {
     font-family: Arial;
     background: #0f172a;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
+
 .container {
-    background: #1e293b;
-    padding: 25px;
-    border-radius: 10px;
-    width: 400px;
+    width: 85%;
+    margin: auto;
 }
+
+.question {
+    background: #1e293b;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+}
+
+.correct { color: #22c55e; }
+.wrong { color: #ef4444; }
+
 button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
+    padding: 10px 20px;
+    background: #22c55e;
     border: none;
-    border-radius: 5px;
+    color: white;
     cursor: pointer;
 }
-.option {
-    background: #334155;
-    color: white;
-}
-.option:hover {
-    background: #475569;
-}
-#nextBtn {
-    background: #22c55e;
-    color: black;
-    display: none;
-}
-.correct { background: green; }
-.wrong { background: red; }
 </style>
 </head>
+
 <body>
 <div class="container">
-    <h2 id="question"></h2>
-    <div id="answers"></div>
-    <button id="nextBtn">Próxima</button>
+<h1>Quiz Completo de Segurança da Informação</h1>
+
+<form id="quizForm"></form>
+
+<button onclick="corrigir()">Finalizar</button>
+
+<div id="resultado"></div>
 </div>
 
 <script>
-const quiz = [
-{
-    q: "O que é informação?",
-    a: [
-        {text:"Dados organizados", correct:true},
-        {text:"Experiência adquirida", correct:false},
-        {text:"Sabedoria humana", correct:false},
-        {text:"Conhecimento técnico", correct:false}
-    ]
-},
-{
-    q: "O que é conhecimento?",
-    a: [
-        {text:"Dados organizados", correct:false},
-        {text:"Informação interpretada com experiência", correct:true},
-        {text:"Sistema computacional", correct:false},
-        {text:"Rede de dados", correct:false}
-    ]
-},
-{
-    q: "Qual é um dos pilares da segurança da informação?",
-    a: [
-        {text:"Velocidade", correct:false},
-        {text:"Confidencialidade", correct:true},
-        {text:"Custo", correct:false},
-        {text:"Design", correct:false}
-    ]
-},
-{
-    q: "O que garante a integridade?",
-    a: [
-        {text:"Acesso aberto", correct:false},
-        {text:"Informação não alterada indevidamente", correct:true},
-        {text:"Backup automático", correct:false},
-        {text:"Velocidade de acesso", correct:false}
-    ]
-},
-{
-    q: "O WannaCry explorava qual vulnerabilidade?",
-    a: [
-        {text:"HTTP", correct:false},
-        {text:"FTP", correct:false},
-        {text:"SMB", correct:true},
-        {text:"DNS", correct:false}
-    ]
-},
-{
-    q: "O que é phishing?",
-    a: [
-        {text:"Ataque físico", correct:false},
-        {text:"Engenharia social para roubo de dados", correct:true},
-        {text:"Backup automático", correct:false},
-        {text:"Firewall", correct:false}
-    ]
-},
-{
-    q: "O que é vulnerabilidade?",
-    a: [
-        {text:"Sistema seguro", correct:false},
-        {text:"Fraqueza explorável", correct:true},
-        {text:"Proteção ativa", correct:false},
-        {text:"Ataque completo", correct:false}
-    ]
-},
-{
-    q: "Qual é a fórmula do risco?",
-    a: [
-        {text:"Ataque + defesa", correct:false},
-        {text:"Probabilidade x Impacto", correct:true},
-        {text:"Senha + firewall", correct:false},
-        {text:"Backup + usuário", correct:false}
-    ]
-},
-{
-    q: "Qual é um tipo de impacto?",
-    a: [
-        {text:"Velocidade", correct:false},
-        {text:"Financeiro", correct:true},
-        {text:"Cor", correct:false},
-        {text:"Layout", correct:false}
-    ]
-},
-{
-    q: "Qual é um controle de segurança?",
-    a: [
-        {text:"Firewall", correct:true},
-        {text:"Teclado", correct:false},
-        {text:"Mouse", correct:false},
-        {text:"Monitor", correct:false}
-    ]
-}
+
+const perguntas = [
+{q:"1. Confidencialidade significa:", op:["Acesso livre","Proteção contra acesso não autorizado","Backup"], r:1},
+{q:"2. Integridade garante:", op:["Dados disponíveis","Dados corretos sem alteração","Acesso remoto"], r:1},
+{q:"3. Disponibilidade garante:", op:["Acesso quando necessário","Sigilo","Ataque"], r:0},
+{q:"4. IDS faz:", op:["Bloqueia ataques","Detecta ataques","Criptografa"], r:1},
+{q:"5. IPS faz:", op:["Detecta apenas","Bloqueia ataques","Ignora tráfego"], r:1},
+{q:"6. Phishing é:", op:["Ataque físico","Engenharia social","Firewall"], r:1},
+{q:"7. Ransomware:", op:["Rouba logs","Criptografa e cobra resgate","Acelera sistema"], r:1},
+{q:"8. Vulnerabilidade:", op:["Fraqueza explorável","Firewall","Senha forte"], r:0},
+{q:"9. Risco:", op:["Ataque","Probabilidade x impacto","Backup"], r:1},
+{q:"10. Spoofing:", op:["Falsificação","Backup","Firewall"], r:0},
+
+{q:"11. Autenticação responde:", op:["O que pode fazer?","Quem é você?","O que fez?"], r:1},
+{q:"12. Autorização responde:", op:["Quem é você?","O que pode fazer?","Onde está"], r:1},
+{q:"13. Auditoria responde:", op:["O que fez?","Quem é você?","Quando login"], r:0},
+
+{q:"14. DAC:", op:["Controle rígido","Controle pelo dono","Baseado em papel"], r:1},
+{q:"15. MAC:", op:["Flexível","Baseado em nível","Por usuário"], r:1},
+{q:"16. RBAC:", op:["Baseado em papéis","Baseado tempo","Random"], r:0},
+{q:"17. ABAC:", op:["Baseado atributo","Baseado senha","Manual"], r:0},
+
+{q:"18. SIEM:", op:["Firewall","Centraliza logs","Antivírus"], r:1},
+{q:"19. Splunk:", op:["Firewall","Plataforma análise logs","Proxy"], r:1},
+{q:"20. ELK é:", op:["Antivírus","Stack de logs","Ataque"], r:1},
+
+{q:"21. Firewall:", op:["Bloqueia tráfego","Apaga dados","Cria malware"], r:0},
+{q:"22. Proxy:", op:["Intercepta conexão","Cria vírus","Apaga logs"], r:0},
+{q:"23. Worm:", op:["Precisa hospedagem","Se espalha sozinho","Manual"], r:1},
+{q:"24. Trojan:", op:["Disfarçado","Visível","Seguro"], r:0},
+{q:"25. Spyware:", op:["Protege","Espiona","Bloqueia"], r:1},
+
+{q:"26. Keylogger:", op:["Captura teclas","Filtra rede","Criptografa"], r:0},
+{q:"27. Rootkit:", op:["Visível","Oculto e poderoso","Firewall"], r:1},
+{q:"28. Botnet:", op:["Rede infectada","Firewall","Backup"], r:0},
+
+{q:"29. Certificado digital:", op:["Identidade virtual","Backup","Ataque"], r:0},
+{q:"30. Chave privada:", op:["Pública","Secreta","Compartilhada"], r:1},
+{q:"31. Chave pública:", op:["Secreta","Distribuída","Oculta"], r:1},
+
+{q:"32. RSA:", op:["Hash","Criptografia assimétrica","Firewall"], r:1},
+{q:"33. ECC:", op:["Curva elíptica","Simétrica","Backup"], r:0},
+
+{q:"34. Fase ataque inicial:", op:["Exploração","Reconhecimento","Execução"], r:1},
+{q:"35. Controle preventivo:", op:["Evita ataque","Corrige","Logs"], r:0},
 ];
 
-let index = 0;
-const question = document.getElementById("question");
-const answers = document.getElementById("answers");
-const nextBtn = document.getElementById("nextBtn");
+const form = document.getElementById("quizForm");
 
-function loadQuestion() {
-    nextBtn.style.display = "none";
-    answers.innerHTML = "";
-    let current = quiz[index];
-    question.innerText = current.q;
+perguntas.forEach((p, i) => {
+    let div = document.createElement("div");
+    div.className="question";
+    div.innerHTML = `<p>${p.q}</p>` +
+    p.op.map((op, j)=>
+        `<input type="radio" name="q${i}" value="${j}"> ${op}<br>`
+    ).join("") +
+    `<div id="resp${i}"></div>`;
+    form.appendChild(div);
+});
 
-    current.a.forEach(opt => {
-        let btn = document.createElement("button");
-        btn.innerText = opt.text;
-        btn.classList.add("option");
-        btn.onclick = () => selectAnswer(btn, opt.correct);
-        answers.appendChild(btn);
+function corrigir() {
+    let pontos = 0;
+
+    perguntas.forEach((p, i)=>{
+        let sel = document.querySelector(`input[name="q${i}"]:checked`);
+        let divResp = document.getElementById(`resp${i}`);
+
+        if(sel){
+            if(parseInt(sel.value) === p.r){
+                pontos++;
+                divResp.innerHTML = `<span class="correct">✔ Correto</span>`;
+            } else {
+                divResp.innerHTML = `<span class="wrong">✖ Errado (Correta: ${p.op[p.r]})</span>`;
+            }
+        } else {
+            divResp.innerHTML = `<span class="wrong">✖ Não respondida (Correta: ${p.op[p.r]})</span>`;
+        }
     });
+
+    document.getElementById("resultado").innerHTML =
+        `<h2>Resultado: ${pontos} / ${perguntas.length}</h2>`;
 }
 
-function selectAnswer(btn, correct) {
-    Array.from(answers.children).forEach(b => b.disabled = true);
-    if(correct) btn.classList.add("correct");
-    else btn.classList.add("wrong");
-    nextBtn.style.display = "block";
-}
-
-nextBtn.onclick = () => {
-    index++;
-    if(index < quiz.length) {
-        loadQuestion();
-    } else {
-        question.innerText = "Fim do Quiz ✅";
-        answers.innerHTML = "";
-        nextBtn.style.display = "none";
-    }
-}
-
-loadQuestion();
 </script>
+
 </body>
 </html>
